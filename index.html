@@ -1,98 +1,33 @@
-<html lang="en"> 
-<head>
-<meta charset="UTF-8"></meta>
-<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0 , user-scalable=no">
-<title> Clapper - Video Player</title>
-  <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/cdnbye@latest/dist/hlsjs-p2p-engine.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@1.2.0/dist/hlsjs-playback.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/cdnbye@latest/dist/clappr-plugin.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/clappr.level-selector/latest/level-selector.min.js"></script>
-<link href='https://www.hls-player.net/fav.png' rel='icon' type='image/x-icon'/>
-
-<style>
-  .video-con {
-    position: relative;
-    width: 100%; /* Ensures the video container takes full width */
-  }
-  .join-us {
-    position: absolute;
-    z-index: 100;
-    top: 6px; /* Adjust this value to move the button up or down */
-    left: 5px; /* Adjust this value to move the button left or right */
-    height: 30px;
-    width: 90px;
-    color: rgb(204, 204, 204);
-    border: 2px solid rgb(204, 204, 204);
-    padding: 1px 0px;
-    border-radius: 2px;
-    text-align: center;
-  }
-  body {
-    margin: 0;
-    padding: 0;       
-  }  
-</style>
-</head>
-<body>
-<div class="video-con embed-responsive">
-  <meta content="no-referrer" name="referrer"></meta>
-  <div id="vid"></div>
+<meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>TV4WAP LIVE4WAP</title> 
   <script>
-    
-    const player = new Clappr.Player.setup({
-      mimeType: 'application/x-mpegURL',
-      maxBufferLength: 2000000,
- autoPlay:true, 
-autoPlayVisible:'partial',
-mute:'yes',
-      height: '100%',
-      width: '100%',
-      plugins: [CDNByeClapprPlugin, LevelSelector],
-     plugins: [HlsjsPlayback, LevelSelector],
-      plugins: {"core": [LevelSelector]}, 
-      parentId: '#vid',
-      source: ,
-      poster: '',
-      watermark: 'https://blogger.googleusercontent.com/img/a/AVvXsEhzK1XqicCbj3BKw8t2h3lsxImcRc6bJKmx5X2saJwVd6-ZpTVWzfSaXi8vHVITt8aTWyYGb72wXyUKMmWeiDFfSVxCXeyy-AmiWdzLahNyj61YGldDn5enqvKtW7QvmtIE1uVXZqQA86FVsOULziDxMjGTwcRY4OM0Xi6raljAlt9uMPoey1Um3BNr6To=s885',
-      watermarkLink: 'https://t.me/tv4wap',
-      position: 'top-right',
-      
-        
-        
-      playback: {
-        hlsjsConfig: {
-          p2pConfig: {
-            logLevel: 'debug',
-            live: true
-          }
-        }
-      }
-    });
-
-
-function getQueryParam(param) {
-      const queryParams = new URLSearchParams(window.location.search);
-      return queryParams.get(param);
-    }
-
-    const streamId= getQueryParam('id');
-
-        if (streamId) {
-            // Try to load requested stream
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const streamId = urlParams.get('id');
+            
+            
+            
             fetch('https://raw.githubusercontent.com/Shubhamkur/Tv/refs/heads/main/tv')
-                .then(response => response.ok ? response.json() : Promise.reject())
-                .then(streams => {
-                    const stream = streams.find(s => s.id === streamId);
-                    if (stream) {
-                        player.setup({
-                            source:stream.m3u8,});
-} 
-                         } 
+                .then(response => response.json())
+                .then(data => {
+                    const streamInfo = data.find(item => item.id === streamId);
+                    
+                    
+                    const iframe = document.getElementById('stream-iframe');
+                    if (streamInfo.m3u8) {
+                    const mpd= encodeURIComponent(streamInfo.m3u8);
+                           
+                     
+ iframe.src =`https://tv4wap.github.io/p1/?url=${mpd}`;
+                    } 
+                });
+        });
+    </script> 
 
 
-  </script>
-</div>
+
+ <body style="position:absolute;margin: 0; padding: 0; height: 100%;width:100%;background:#000"> 
+  <iframe id="stream-iframe" style="width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen ></iframe> 
+
+ </body>
